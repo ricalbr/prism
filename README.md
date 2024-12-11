@@ -1,5 +1,5 @@
 # prism
-Photon-statistic Retrieval vIa SPAD arrays Modelling
+**P**hoton-statistic **R**etrieval v**I**a **S**PAD arrays **M**odelling
 
 ### 
 
