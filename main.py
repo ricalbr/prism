@@ -3,9 +3,7 @@ from __future__ import annotations
 
 import matplotlib.pyplot as plt
 import numpy as np
-import scipy
 import scipy.stats as sst
-import prism
 from prism import (
     EMEsolver,
     get_dcr_array,
@@ -33,10 +31,7 @@ def main():
 
     # GET SPAD MATRIX AND CLICKS ARRAY
     V = get_spad_matrix(num_det=D, eta=eta, dcr=mean_dcr, xtk=xtk)
-    c = get_clicks_array(
-        num_det=D, eta=eta, dcr=dcr, xtk=xtk, ph_stat=ph_stat, it=iterations
-    )
-    # c = np.loadtxt('click_vector')
+    c = get_clicks_array(num_det=D, eta=eta, dcr=dcr, xtk=xtk, ph_stat=ph_stat, it=iterations)
 
     # SOLVE THE c = Vp_n PROBLEM
     p_n = EMEsolver(V, c, alpha=1e-2, epsilon=1e-18)
