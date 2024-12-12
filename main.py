@@ -18,7 +18,7 @@ def main():
     # SPAD ARRAY/MATRIX PROPERTIES
     D = 64
     eta = 0.80
-    mean_dcr, dcr = get_dcr_array(D=D, dcr_min=1e-3, dcr_max=1e-2)
+    mean_dcr, dcr = get_dcr_array(num_det=D, dcr_min=1e-3, dcr_max=1e-2)
     xtk = 0.05
     iterations = int(1e5)
 
@@ -28,7 +28,7 @@ def main():
     ph_stat = sst.rv_discrete(values=([1, 3], [0.5, 0.5]))
     ph_stat = sst.poisson(mu=40)
     # ph_stat = sst.poisson(mu=2)
-    # ph_stat = sst.boltzmann(lambda_=0.2, N=6)
+    # ph_stat = sst.boltzmann(lambda_=0.2, num_ph=6)
     # ph_stat = sst.rv_discrete(values=([1, 3, 5, 7, 9, 11, 13], np.ones((7,))/7))
 
     # GET SPAD MATRIX AND CLICKS ARRAY
@@ -45,9 +45,6 @@ def main():
     p_space = np.array(range(D + 1))
     fid = 1 - np.linalg.norm(p_n - ph_stat.pmf(p_space))
     print(f"Fidelity of the reconstruction: {fid:.3f}.")
-    print(
-        f"Fidelity of the reconstruction: {prism.fidelity(p_n, ph_stat.pmf(p_space)):.3f}."
-    )
 
     # PREPARE PLOT
     plt.figure()
