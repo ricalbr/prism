@@ -237,8 +237,9 @@ def P(
 ) -> float:
     """Photon-count probability function.
 
-    Photon-count probability function for accounting a number C of clicks given num_ph photons, num_dark_counts dark-counts events (
-    avalanches) and a finite number of detectors num_det (with efficiency eta, and dark-count rate dcr).
+    Photon-count probability function for accounting a number C of clicks given num_ph photons, num_dark_counts
+    dark-counts events ( avalanches) and a finite number of detectors num_det (with efficiency eta, and dark-count rate
+    dcr).
 
     Parameters
     ----------
@@ -258,7 +259,8 @@ def P(
     Returns
     -------
     float
-        The probability of having C clicks given the tuple of physical parameters (num_ph, num_dark_counts, num_det, eta, dcr).
+        The probability of having C clicks given the tuple of physical parameters (num_ph, num_dark_counts, num_det,
+        eta, dcr).
     """
 
     if num_ph < 0 or clicks < 0 or clicks > num_ph:
@@ -421,7 +423,7 @@ def get_spad_matrix(
 
 def get_dcr_array(
     num_det: int, dcr_min: float = 1e-3, dcr_max: float = 1e-2
-) -> tuple[float, np.ndarray]:
+) -> tuple[float | np.ndarray, np.ndarray]:
     """Get dark-count rates array.
 
     Given a series of SPADs the dark count rate varies among the ensamble of detectors following (typically) a
@@ -444,7 +446,7 @@ def get_dcr_array(
     """
     dcr = np.logspace(np.log10(dcr_min), np.log10(dcr_max), num_det)
     random.shuffle(dcr)
-    return np.mean(dcr), dcr
+    return np.mean(dcr, dtype=float), dcr
 
 
 def get_clicks_array(
