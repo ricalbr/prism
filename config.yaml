@@ -1,0 +1,16 @@
+# Simulation parameters
+num_det: 64             # Number of detectors
+eta: 0.8                # Detection efficiency
+xtk: 0.00               # Crosstalk probability
+iterations: 1e8         # Number of simulation iterations
+
+# Dark count rate range
+dcr_min: 1e-3           # Minimum dark count rate
+dcr_max: 1e-2           # Maximum dark count rate
+
+# Photon distribution settings
+photon_distribution:
+  # type: "poisson"      # Options: "poisson" or "discrete"
+  # mean: 0.6            # Used only if distribution_type is "poissonian"
+  type: "discrete"      # Options: "poisson" or "discrete"
+  probabilities: [0.0, 0.1, 0, 0, 0, 0, 0, 0.2, 0.4, 0.2, 0.1]
