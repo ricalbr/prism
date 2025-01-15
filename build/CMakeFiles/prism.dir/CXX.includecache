@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ricalbr/click/include/prism/solver.hpp
+Eigen/Dense
+-
+
+/home/ricalbr/click/src/solver.cpp
+../include/prism/solver.hpp
+/home/ricalbr/click/include/prism/solver.hpp
+Eigen/Dense
+-
+cmath
+-
+iostream
+-
+

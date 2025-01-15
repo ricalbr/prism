@@ -1,0 +1,1 @@
+/usr/bin/c++  -g -O3 -march=native -mavx2 -mfma -finline-limit=1000000 -ffp-contract=fast -fopenmp   CMakeFiles/prism_simulator.dir/main.cpp.o  -o bin/prism_simulator  lib/libprism.a /usr/lib/x86_64-linux-gnu/libyaml-cpp.so.0.6.2 

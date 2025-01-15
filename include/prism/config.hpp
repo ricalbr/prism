@@ -13,6 +13,7 @@ struct SimulationConfig {
     int iterations;
     double dcr_min;
     double dcr_max;
+    double alpha;
 };
 std::tuple<SimulationConfig, std::function<int(Xoshiro256PlusPlus &)>> parse_yaml(const std::string &filename);
 

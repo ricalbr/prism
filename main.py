@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy
 
-import prism
-from prism import EMEsolver
+# import prism
+# from prism import EMEsolver
 
 
 def main():
@@ -16,21 +16,21 @@ def main():
     # INPUT PHOTON STATISTICS
     # ph_stat = scipy.stats.rv_discrete(values=([20], [1]))
     # ph_stat = scipy.stats.rv_discrete(values=([1], [1]))
-    ph_stat = scipy.stats.rv_discrete(values=([1, 7, 8, 9, 10], [0.1, 0.2, 0.4, 0.2, 0.1]))
-    # ph_stat = scipy.stats.poisson(mu=40)
+    # ph_stat = scipy.stats.rv_discrete(values=([1, 7, 8, 9, 10], [0.1, 0.2, 0.4, 0.2, 0.1]))
+    ph_stat = scipy.stats.poisson(mu=6)
     # ph_stat = scipy.stats.boltzmann(lambda_=0.2, N=6)
 
     # GET SPAD MATRIX AND CLICKS ARRAY
-    V, c = np.loadtxt('V.txt'), np.loadtxt('c.txt')
+    # V, c = np.loadtxt('V.txt'), np.loadtxt('c.txt')
 
     # SOLVE THE c = Vp_n PROBLEM
-    p_n = EMEsolver(V, c, alpha=1e-5, iterations=int(1e10), epsilon=1e-18)
+    # p_n = EMEsolver(V, c, alpha=1e-5, iterations=int(1e10), epsilon=1e-18)
+    p_n = np.loadtxt('p.txt')
 
     # FIDELITY
     p_space = np.array(range(D + 1))
     fid = 1 - np.linalg.norm(p_n - ph_stat.pmf(p_space))
     print(f"Fidelity of the reconstruction: {fid:.3f}.")
-    print(f"Fidelity of the reconstruction: {prism.fidelity(p_n, ph_stat.pmf(p_space)):.3f}.")
 
     # PREPARE PLOT
     plt.figure()

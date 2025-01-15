@@ -13,6 +13,7 @@ std::tuple<SimulationConfig, std::function<int(Xoshiro256PlusPlus &)>> parse_yam
     sim_config.iterations = config["iterations"].as<double>();
     sim_config.dcr_min = config["dcr_min"].as<double>();
     sim_config.dcr_max = config["dcr_max"].as<double>();
+    sim_config.alpha = config["alpha"].as<double>();
 
     std::function<int(Xoshiro256PlusPlus &)> phot_dist;
 
