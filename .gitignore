@@ -37,3 +37,6 @@
 
 # Makefiles
 build/*
+
+# Python cache directory
+__pycache__/*
