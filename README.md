@@ -24,8 +24,8 @@
 ### Clone the Repository
 First, clone the PRISM project repository:
 ```bash
-git clone <repository_url>
-cd <repository_name>
+git clone git@github.com:ricalbr/prism.git
+cd prism
 ```
 
 ### Install Dependencies
