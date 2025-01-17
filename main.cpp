@@ -4,6 +4,7 @@
 #include "include/prism/solver.hpp"
 #include "include/prism/utils.hpp"
 #include <Eigen/Dense>
+#include <chrono>
 #include <cmath>
 #include <iostream>
 #include <yaml-cpp/yaml.h>
@@ -35,11 +36,16 @@ int main(int argc, char *argv[]) {
 
     // // Simulate clicks
     std::cout << "Simulating clicks\t";
+
     uint64_t seed = 123456789; // Seed for RNG
+    auto start_time = std::chrono::high_resolution_clock::now();
     VectorXd c = get_clicks_array(sim_config.num_det, sim_config.eta, dcr,
                                   sim_config.xtk, sim_config.iterations,
                                   phot_dist, seed);
+    auto end_time = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end_time - start_time;
     std::cout << "[DONE]\n";
+    std::cout << "Elapsed time: " << elapsed_seconds.count() << " s\n";
     // write_array(c, "freq.txt");
 
     // // Statistics retrieval (EME)
