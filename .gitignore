@@ -32,7 +32,7 @@
 *.app
 
 # Text files
-*.txt
+# *.txt
 # *.yaml
 
 # Makefiles
