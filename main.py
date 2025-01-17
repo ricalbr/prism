@@ -1,40 +1,36 @@
 from __future__ import annotations
 
-
 import matplotlib.pyplot as plt
 import numpy as np
-import scipy.stats as sst
-import prism as pp
+import scipy
+
+# import prism
+# from prism import EMEsolver
+
 
 def main():
     # SPAD ARRAY/MATRIX PROPERTIES
     D = 64
-    eta = 0.80
-    mean_dcr, dcr = pp.get_dcr_array(num_det=D, dcr_min=1e-3, dcr_max=1e-2)
-    xtk = 0.05
-    iterations = int(1e5)
+    # mean_dcr, dcr = get_dcr_array(D=D, dcr_min=1e-3, dcr_max=1e-2)
 
     # INPUT PHOTON STATISTICS
-    ph_stat = sst.rv_discrete(values=([20], [1]))
-    # ph_stat = sst.rv_discrete(values=([2], [1]))
-    # ph_stat = sst.rv_discrete(values=([1, 3], [0.5, 0.5]))
-    # ph_stat = sst.poisson(mu=40)
-    # ph_stat = sst.poisson(mu=2)
-    # ph_stat = sst.boltzmann(lambda_=0.2, num_ph=6)
-    # ph_stat = sst.rv_discrete(values=([1, 3, 5, 7, 9, 11, 13], np.ones((7,))/7))
+    # ph_stat = scipy.stats.rv_discrete(values=([20], [1]))
+    ph_stat = scipy.stats.rv_discrete(values=([4], [1]))
+    # ph_stat = scipy.stats.rv_discrete(values=([1, 7, 8, 9, 10], [0.1, 0.2, 0.4, 0.2, 0.1]))
+    # ph_stat = scipy.stats.poisson(mu=6)
+    # ph_stat = scipy.stats.boltzmann(lambda_=0.2, N=6)
 
     # GET SPAD MATRIX AND CLICKS ARRAY
-    V = pp.get_spad_matrix(num_det=D, eta=eta, dcr=mean_dcr, xtk=xtk)
-    c = pp.get_clicks_array(num_det=D, eta=eta, dcr=dcr, xtk=xtk, ph_stat=ph_stat, it=iterations)
-    # np.savetxt('c_vec', c)
-    # c = np.loadtxt('c_vec')
+    # V, c = np.loadtxt('V.txt'), np.loadtxt('c.txt')
 
     # SOLVE THE c = Vp_n PROBLEM
-    p_n = pp.EMEsolver(V, c, alpha=1e0, epsilon=1e-18, max_stagnation=1e6)
+    # p_n = EMEsolver(V, c, alpha=1e-5, iterations=int(1e10), epsilon=1e-18)
+    p_n = np.loadtxt('p.txt')
 
     # FIDELITY
     p_space = np.array(range(D + 1))
-    print(f"Fidelity of the reconstruction: {pp.fidelity(p_n, ph_stat.pmf(p_space)):.3f}.")
+    fid = 1 - np.linalg.norm(p_n - ph_stat.pmf(p_space))
+    print(f"Fidelity of the reconstruction: {fid:.3f}.")
 
     # PREPARE PLOT
     plt.figure()
@@ -46,8 +42,10 @@ def main():
     plt.title(f"Reconstructed p vector")
     plt.xlabel("n")
     plt.ylabel("p(n)")
+    plt.ylim([0, 1])
     plt.show()
 
 
 if __name__ == "__main__":
     main()
+
