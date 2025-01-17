@@ -15,9 +15,9 @@ def main():
 
     # INPUT PHOTON STATISTICS
     # ph_stat = scipy.stats.rv_discrete(values=([20], [1]))
-    # ph_stat = scipy.stats.rv_discrete(values=([1], [1]))
+    ph_stat = scipy.stats.rv_discrete(values=([4], [1]))
     # ph_stat = scipy.stats.rv_discrete(values=([1, 7, 8, 9, 10], [0.1, 0.2, 0.4, 0.2, 0.1]))
-    ph_stat = scipy.stats.poisson(mu=6)
+    # ph_stat = scipy.stats.poisson(mu=6)
     # ph_stat = scipy.stats.boltzmann(lambda_=0.2, N=6)
 
     # GET SPAD MATRIX AND CLICKS ARRAY
