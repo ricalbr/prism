@@ -71,7 +71,7 @@ vcpkg integrate install
    ```
 4. Run the executable:
    ```bash
-   ./prism_main
+   ./prism_simulator
    ```
 
 #### Windows
@@ -90,21 +90,11 @@ vcpkg integrate install
    ```
 5. Run the executable:
    ```
-   prism_main.exe
+   prism_simulator.exe
    ```
 
 ## File Structure
 - **`prism/`**: Contains the library source and headers.
+- **`config.yaml`**: Contains the configuration file for running the simulations.
 - **`main.cpp`**: The main file to run the simulation.
 - **`CMakeLists.txt`**: Configuration files for building the project.
-
-## Notes
-- Use the `-DCMAKE_BUILD_TYPE=Release` flag with CMake to enable optimizations for production builds.
-- For debugging, use `-DCMAKE_BUILD_TYPE=Debug`.
-
-## License
-This project is distributed under the [MIT License](LICENSE).
-
-For issues or contributions, feel free to open a pull request or file an issue in the repository. Happy coding!
-
-
