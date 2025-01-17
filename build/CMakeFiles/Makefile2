@@ -44,10 +44,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ricalbr/click
+CMAKE_SOURCE_DIR = /home/ricalbr/prism
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ricalbr/click/build
+CMAKE_BINARY_DIR = /home/ricalbr/prism/build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -76,14 +76,14 @@ clean: CMakeFiles/prism.dir/clean
 CMakeFiles/prism_simulator.dir/all: CMakeFiles/prism.dir/all
 	$(MAKE) -f CMakeFiles/prism_simulator.dir/build.make CMakeFiles/prism_simulator.dir/depend
 	$(MAKE) -f CMakeFiles/prism_simulator.dir/build.make CMakeFiles/prism_simulator.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ricalbr/click/build/CMakeFiles --progress-num=8,9 "Built target prism_simulator"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ricalbr/prism/build/CMakeFiles --progress-num=8,9 "Built target prism_simulator"
 .PHONY : CMakeFiles/prism_simulator.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/prism_simulator.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ricalbr/click/build/CMakeFiles 9
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ricalbr/prism/build/CMakeFiles 9
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/prism_simulator.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ricalbr/click/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ricalbr/prism/build/CMakeFiles 0
 .PHONY : CMakeFiles/prism_simulator.dir/rule
 
 # Convenience name for target.
@@ -103,14 +103,14 @@ CMakeFiles/prism_simulator.dir/clean:
 CMakeFiles/prism.dir/all:
 	$(MAKE) -f CMakeFiles/prism.dir/build.make CMakeFiles/prism.dir/depend
 	$(MAKE) -f CMakeFiles/prism.dir/build.make CMakeFiles/prism.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ricalbr/click/build/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target prism"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ricalbr/prism/build/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target prism"
 .PHONY : CMakeFiles/prism.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/prism.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ricalbr/click/build/CMakeFiles 7
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ricalbr/prism/build/CMakeFiles 7
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/prism.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ricalbr/click/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ricalbr/prism/build/CMakeFiles 0
 .PHONY : CMakeFiles/prism.dir/rule
 
 # Convenience name for target.

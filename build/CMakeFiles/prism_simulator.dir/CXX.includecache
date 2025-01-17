@@ -6,9 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/home/ricalbr/click/include/prism/config.hpp
+/home/ricalbr/prism/include/prism/config.hpp
 random.hpp
-/home/ricalbr/click/include/prism/random.hpp
+/home/ricalbr/prism/include/prism/random.hpp
 functional
 -
 string
@@ -16,21 +16,21 @@ string
 tuple
 -
 
-/home/ricalbr/click/include/prism/matrix.hpp
+/home/ricalbr/prism/include/prism/matrix.hpp
 Eigen/Dense
 -
 string
 -
 
-/home/ricalbr/click/include/prism/random.hpp
+/home/ricalbr/prism/include/prism/random.hpp
 cstdint
 -
 vector
 -
 
-/home/ricalbr/click/include/prism/simulation.hpp
+/home/ricalbr/prism/include/prism/simulation.hpp
 random.hpp
-/home/ricalbr/click/include/prism/random.hpp
+/home/ricalbr/prism/include/prism/random.hpp
 Eigen/Dense
 -
 cstdint
@@ -38,28 +38,30 @@ cstdint
 functional
 -
 
-/home/ricalbr/click/include/prism/solver.hpp
+/home/ricalbr/prism/include/prism/solver.hpp
 Eigen/Dense
 -
 
-/home/ricalbr/click/include/prism/utils.hpp
+/home/ricalbr/prism/include/prism/utils.hpp
 Eigen/Dense
 -
 string
 -
 
-/home/ricalbr/click/main.cpp
+/home/ricalbr/prism/main.cpp
 include/prism/config.hpp
-/home/ricalbr/click/include/prism/config.hpp
+/home/ricalbr/prism/include/prism/config.hpp
 include/prism/matrix.hpp
-/home/ricalbr/click/include/prism/matrix.hpp
+/home/ricalbr/prism/include/prism/matrix.hpp
 include/prism/simulation.hpp
-/home/ricalbr/click/include/prism/simulation.hpp
+/home/ricalbr/prism/include/prism/simulation.hpp
 include/prism/solver.hpp
-/home/ricalbr/click/include/prism/solver.hpp
+/home/ricalbr/prism/include/prism/solver.hpp
 include/prism/utils.hpp
-/home/ricalbr/click/include/prism/utils.hpp
+/home/ricalbr/prism/include/prism/utils.hpp
 Eigen/Dense
+-
+chrono
 -
 cmath
 -

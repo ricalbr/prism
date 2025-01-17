@@ -6,5 +6,5 @@ CXX_FLAGS = -g -O3 -march=native -mavx2 -mfma -finline-limit=1000000 -ffp-contra
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/ricalbr/click/include 
+CXX_INCLUDES = -I/home/ricalbr/prism/include 
 

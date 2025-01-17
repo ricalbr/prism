@@ -4,12 +4,12 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/ricalbr/click/src/config.cpp" "/home/ricalbr/click/build/CMakeFiles/prism.dir/src/config.cpp.o"
-  "/home/ricalbr/click/src/matrix.cpp" "/home/ricalbr/click/build/CMakeFiles/prism.dir/src/matrix.cpp.o"
-  "/home/ricalbr/click/src/random.cpp" "/home/ricalbr/click/build/CMakeFiles/prism.dir/src/random.cpp.o"
-  "/home/ricalbr/click/src/simulation.cpp" "/home/ricalbr/click/build/CMakeFiles/prism.dir/src/simulation.cpp.o"
-  "/home/ricalbr/click/src/solver.cpp" "/home/ricalbr/click/build/CMakeFiles/prism.dir/src/solver.cpp.o"
-  "/home/ricalbr/click/src/utils.cpp" "/home/ricalbr/click/build/CMakeFiles/prism.dir/src/utils.cpp.o"
+  "/home/ricalbr/prism/src/config.cpp" "/home/ricalbr/prism/build/CMakeFiles/prism.dir/src/config.cpp.o"
+  "/home/ricalbr/prism/src/matrix.cpp" "/home/ricalbr/prism/build/CMakeFiles/prism.dir/src/matrix.cpp.o"
+  "/home/ricalbr/prism/src/random.cpp" "/home/ricalbr/prism/build/CMakeFiles/prism.dir/src/random.cpp.o"
+  "/home/ricalbr/prism/src/simulation.cpp" "/home/ricalbr/prism/build/CMakeFiles/prism.dir/src/simulation.cpp.o"
+  "/home/ricalbr/prism/src/solver.cpp" "/home/ricalbr/prism/build/CMakeFiles/prism.dir/src/solver.cpp.o"
+  "/home/ricalbr/prism/src/utils.cpp" "/home/ricalbr/prism/build/CMakeFiles/prism.dir/src/utils.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
