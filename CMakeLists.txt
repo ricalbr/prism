@@ -4,6 +4,7 @@ project(Prism)
 # Set the C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(DCMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_FLAGS "-g -O3 -march=native -mavx2 -mfma -finline-limit=1000000 -ffp-contract=fast")
 
 # Set output directories for binaries and libraries
