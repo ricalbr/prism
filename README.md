@@ -1,6 +1,9 @@
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/d35a5529-2c19-4dbb-89b6-ece1fc890b8a" alt="prism_logo" align="center" width="200"/>
-</p>
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/3b0fb24b-c23a-44c6-93da-9739b594da17" width="200">
+    <img alt="Logo" src="https://github.com/user-attachments/assets/d35a5529-2c19-4dbb-89b6-ece1fc890b8a" width="200">
+  </picture>
+</div>
 
 ## Overview
 **PRISM** (**P**hoton-statistic **R**etrieval v**I**a **S**PAD arrays **M**odelling) is a library for simulating SPAD array photo-detection and retrieving input light statistics. This document outlines the steps to install dependencies, compile, and run the project on Linux and Windows.
