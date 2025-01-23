@@ -13,9 +13,9 @@ photon_distribution:
   # type: "poisson"      # Options: "poisson" or "discrete"
   # mean: 20            # Used only if distribution_type is "poissonian"
   type: "discrete"      # Options: "poisson" or "discrete"
-  # probabilities: [0.0, 0.1, 0, 0, 0, 0, 0, 0.2, 0.4, 0.2, 0.1]
+  probabilities: [0.0, 0.1, 0, 0, 0, 0, 0, 0.2, 0.4, 0.2, 0.1]
   # probabilities: [0, 0, 0, 0, 1]
-  probabilities: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+  # probabilities: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
 
 # EME solver settings
 alpha: 1e-2
