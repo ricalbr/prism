@@ -58,6 +58,13 @@ double analytic(int D, double eta, double dcr, int N, int L) {
     return sum;
 }
 
+double borel(double mu, int n) {
+    if (n == 0) {
+        return 0;
+    }
+    return std::exp(-mu * n) * std::pow(mu * n, n - 1) / std::tgamma(n + 1);
+}
+
 void get_spad_matrix(MatrixXd &A, int num_det, double eta, double dcr,
                      double xtk) {
 

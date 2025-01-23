@@ -10,7 +10,8 @@ using namespace Eigen;
 
 const int MAX_DET = 256;
 
-int simulate(int num_det, int num_ph, double eta, const Eigen::VectorXd &dcr, double xtk, Xoshiro256PlusPlus &rng) {
+int simulate(int num_det, int num_ph, double eta, const Eigen::VectorXd &dcr,
+             double xtk, Xoshiro256PlusPlus &rng) {
     std::bitset<MAX_DET> click_space;
 
     // Dark counts
@@ -29,21 +30,58 @@ int simulate(int num_det, int num_ph, double eta, const Eigen::VectorXd &dcr, do
 
     // Crosstalk
     if (xtk > 0.0) {
-        std::bitset<MAX_DET> nbors = (click_space << 1) | (click_space >> 1);
-        nbors &= ~click_space;
-
+        std::bitset<MAX_DET> click_space_old = click_space;
+        std::vector<int> mask(num_det, 0);
+        std::vector<int> nbors(num_det, 0);
         for (int i = 0; i < num_det; ++i) {
-            if (nbors[i] && rng.next_double() < xtk) {
-                click_space.set(i);
+            mask[i] = click_space[i];
+        }
+        while (true) {
+            for (int i = 0; i < num_det; i++) {
+                int left = 0, right = 0;
+                if (i > 0) {
+                    left = (click_space ^ click_space_old)[i - 1];
+                }
+                if (i < num_det - 1) {
+                    right = (click_space ^ click_space_old)[i + 1];
+                }
+                nbors[i] = left + right;
+            }
+
+            for (int i = 0; i < num_det; i++) {
+                if (mask[i] == 0) {
+                    mask[i] = nbors[i];
+                } else {
+                    mask[i] = 0;
+                }
+            }
+
+            click_space_old = click_space;
+            for (int i = 0; i < num_det; i++) {
+                for (int j = 0; j < mask[i]; j++) {
+                    if (rng.next_double() < xtk) {
+                        click_space.set(i);
+                    }
+                }
+            }
+
+            if ((click_space ^ click_space_old).none()) {
+                break;
+            }
+
+            for (int i = 0; i < num_det; i++) {
+                mask[i] = click_space_old[i] + click_space[i];
             }
         }
     }
-
     return click_space.count();
 }
 
-VectorXd get_clicks_array(int num_det, double eta, const Eigen::VectorXd &dcr, double xtk, int iterations,
-                          const std::function<int(Xoshiro256PlusPlus &)> &photon_distribution, uint64_t seed) {
+VectorXd get_clicks_array(
+    int num_det, double eta, const Eigen::VectorXd &dcr, double xtk,
+    int iterations,
+    const std::function<int(Xoshiro256PlusPlus &)> &photon_distribution,
+    uint64_t seed) {
     VectorXd frequencies = VectorXd::Zero(num_det + 1);
 
 #pragma omp parallel
@@ -58,7 +96,8 @@ VectorXd get_clicks_array(int num_det, double eta, const Eigen::VectorXd &dcr, d
             if (sum_clicks < local_frequencies.size()) { // Ensure valid index
                 local_frequencies[sum_clicks] += 1.0;
             } else {
-                std::cout << "Saturating... measured clicks: " << sum_clicks << "\n";
+                std::cout << "Saturating... measured clicks: " << sum_clicks
+                          << "\n";
                 local_frequencies[local_frequencies.size() - 1] += 1.0;
             }
         }
