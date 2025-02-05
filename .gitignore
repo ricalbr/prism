@@ -38,5 +38,8 @@
 # Makefiles
 build/*
 
+# Particular directories
+old/*
+
 # Python cache directory
 __pycache__/*
