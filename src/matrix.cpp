@@ -1,7 +1,9 @@
 #include "../include/prism/matrix.hpp"
 #include <Eigen/Dense>
 #include <cmath>
-#include <iostream>
+#include <sstream>
+#include <unordered_map>
+#include <vector>
 
 using namespace Eigen;
 
@@ -20,11 +22,10 @@ long long comb(int n, int k) {
     return c[k];
 }
 
-// Memoizzazione personalizzata per P
 std::unordered_map<std::string, double> memo;
-std::string make_key(int D, double eta, double dcr, int N, int C, int K) {
+template <typename... Args> std::string make_key(Args... args) {
     std::ostringstream oss;
-    oss << D << "," << eta << "," << dcr << "," << N << "," << C << "," << K;
+    ((oss << args << ","), ...);
     return oss.str();
 }
 
@@ -58,13 +59,6 @@ double analytic(int D, double eta, double dcr, int N, int L) {
     return sum;
 }
 
-double borel(double mu, int n) {
-    if (n == 0) {
-        return 0;
-    }
-    return std::exp(-mu * n) * std::pow(mu * n, n - 1) / std::tgamma(n + 1);
-}
-
 void get_spad_matrix(MatrixXd &A, int num_det, double eta, double dcr,
                      double xtk) {
 
@@ -72,16 +66,5 @@ void get_spad_matrix(MatrixXd &A, int num_det, double eta, double dcr,
         for (int m = 0; m <= num_det; ++m) {
             A(n, m) = analytic(num_det, eta, dcr, m, n);
         }
-    }
-    // Add cross-talk
-    if (xtk > 1e-8) {
-        MatrixXd X = MatrixXd::Zero(num_det + 1, num_det + 1);
-        for (int i = 0; i < num_det + 1; i++) {
-            for (int j = 0; j < num_det + 1; j++) {
-                X(i, j) =
-                    comb(j, i - j) * pow(xtk, i - j) * pow(1 - xtk, 2 * j - i);
-            }
-        }
-        A = X * A;
     }
 }
