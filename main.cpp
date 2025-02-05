@@ -3,10 +3,10 @@
 #include "include/prism/simulation.hpp"
 #include "include/prism/solver.hpp"
 #include "include/prism/utils.hpp"
+#include "include/prism/xtalk.hpp"
 #include <Eigen/Dense>
 #include <chrono>
 #include <cmath>
-#include <iomanip>
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 
@@ -31,6 +31,8 @@ int main(int argc, char *argv[]) {
     MatrixXd V = MatrixXd::Zero(sim_config.num_det + 1, sim_config.num_det + 1);
     get_spad_matrix(V, sim_config.num_det, sim_config.eta, dcr.mean(),
                     sim_config.xtk);
+    MatrixXd XG = x_matrix_gallego(sim_config.xtk, sim_config.num_det + 1);
+    MatrixXd VG = XG * V;
     std::cout << "[DONE]\n";
 
     // // Simulate clicks
@@ -49,15 +51,8 @@ int main(int argc, char *argv[]) {
 
     // Statistics retrieval (EME)
     std::cout << "Retrieving photon statistics...\t";
-    VectorXd p = EMESolver(V, c, sim_config.alpha);
+    VectorXd p = EMESolver(VG, c, sim_config.alpha);
     write_array(p, "p.txt");
-
-    VectorXd p_space =
-        VectorXd::LinSpaced(sim_config.num_det, 0, sim_config.num_det + 1);
-    // double fid = 1 - (p - pmf(p_space)).norm();
-    double fid = 0;
-    std::cout << "Reconstruction fidelity: \t" << std::fixed
-              << std::setprecision(3) << fid << std::endl;
 
     return 0;
 }

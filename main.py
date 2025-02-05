@@ -9,9 +9,10 @@ def main():
     D = 64
 
     # INPUT PHOTON STATISTICS
-    # ph_stat = scipy.stats.rv_discrete(values=([20], [1]))
-    ph_stat = scipy.stats.rv_discrete(values=([1, 7, 8, 9, 10], [0.1, 0.2, 0.4, 0.2, 0.1]))
-    # ph_stat = scipy.stats.poisson(mu=20)
+    # ph_stat = scipy.stats.rv_discrete(values=([4], [1]))
+    ph_stat = scipy.stats.rv_discrete(values=([0, 1, 2, 3, 4], [0.2, 0.2, 0.2, 0.2, 0.2]))
+    # ph_stat = scipy.stats.rv_discrete(values=([1, 7, 8, 9, 10], [0.1, 0.2, 0.4, 0.2, 0.1]))
+    # ph_stat = scipy.stats.poisson(mu=50)
     # ph_stat = scipy.stats.boltzmann(lambda_=0.2, N=6)
 
     # FIDELITY
