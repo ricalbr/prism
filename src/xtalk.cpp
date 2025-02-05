@@ -77,5 +77,3 @@ MatrixXd x_matrix_simple(double eps, int num) {
     }
     return X;
 }
-
-// MatrixXd x_matrix_std(double eps, int num);
