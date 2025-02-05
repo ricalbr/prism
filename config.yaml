@@ -1,5 +1,5 @@
 # Simulation parameters
-num_det: 64             # Number of detectors
+num_det: 128             # Number of detectors
 eta: 0.8                # Detection efficiency
 xtk: 0.05               # Crosstalk probability
 iterations: 1e8         # Number of simulation iterations
@@ -10,12 +10,12 @@ dcr_max: 1e-2           # Maximum dark count rate
 
 # Photon distribution settings
 photon_distribution:
-  # type: "poisson"      # Options: "poisson" or "discrete"
-  # mean: 50            # Used only if distribution_type is "poissonian"
-  type: "discrete"      # Options: "poisson" or "discrete"
+  type: "poisson"      # Options: "poisson" or "discrete"
+  mean: 5            # Used only if distribution_type is "poissonian"
+  # type: "discrete"      # Options: "poisson" or "discrete"
   # probabilities: [0.0, 0.1, 0, 0, 0, 0, 0, 0.2, 0.4, 0.2, 0.1]
-  probabilities: [0.2, 0.2, 0.2, 0.2, 0.2]
+  # probabilities: [0.2, 0.2, 0.2, 0.2, 0.2]
   # probabilities: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
 
 # EME solver settings
-alpha: 1e-4
+alpha: 1e-2
