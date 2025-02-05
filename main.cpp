@@ -32,7 +32,9 @@ int main(int argc, char *argv[]) {
     get_spad_matrix(V, sim_config.num_det, sim_config.eta, dcr.mean(),
                     sim_config.xtk);
     MatrixXd XG = x_matrix_gallego(sim_config.xtk, sim_config.num_det + 1);
+    MatrixXd XS = x_matrix_simple(sim_config.xtk, sim_config.num_det + 1);
     MatrixXd VG = XG * V;
+    MatrixXd VS = XS * V;
     std::cout << "[DONE]\n";
 
     // // Simulate clicks
@@ -50,9 +52,17 @@ int main(int argc, char *argv[]) {
     // write_array(c, "freq.txt");
 
     // Statistics retrieval (EME)
-    std::cout << "Retrieving photon statistics...\t";
-    VectorXd p = EMESolver(VG, c, sim_config.alpha);
-    write_array(p, "p.txt");
+    std::cout << "Retrieving photon statistics...\t" << std::endl;
+
+    std::cout << "Gallego method...\t";
+    VectorXd pG = EMESolver(VG, c, sim_config.alpha);
+    write_array(pG, "pG.txt");
+    std::cout << "[DONE]\n";
+
+    std::cout << "Gallego method...\t";
+    VectorXd pS = EMESolver(VS, c, sim_config.alpha);
+    write_array(pS, "pS.txt");
+    std::cout << "[DONE]\n";
 
     return 0;
 }
