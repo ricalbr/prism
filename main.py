@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pathlib
+
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
@@ -27,11 +29,15 @@ def create_distribution(photon_distribution):
         raise ValueError(f"Photon statistics '{dist_type}' not supported!")
 
 
-def get_fidelity(filename, distribution, plot=False):
+def get_fidelity(filename, distribution, cwd, plot=False):
     p_n = np.loadtxt(filename)
     p_space = np.array(range(len(p_n)))
     p_stat = distribution.pmf(p_space)
     fid = 1 - np.linalg.norm(p_n - p_stat)
+
+    # EXPORT
+    np.savetxt(cwd / 'predicted.txt', p_n)
+    np.savetxt(cwd / 'theoretical.txt', p_stat)
 
     # PLOT
     plt.figure(1)
@@ -44,6 +50,7 @@ def get_fidelity(filename, distribution, plot=False):
     plt.ylim([0, 1])
     if plot:
         plt.show()
+    plt.savefig(cwd / 'plot.png')
     return fid
 
 
@@ -53,13 +60,20 @@ def main():
     yaml_data = load_yaml("config.yaml")
     photon_distribution = yaml_data.get("photon_distribution", {})
     distribution = create_distribution(photon_distribution)
+    try:
+        filename = f'N{yaml_data.get("num_det")}_DE{yaml_data.get("eta")}_XT{yaml_data.get("xtk")}_STAT_{photon_distribution.get("type")}_{photon_distribution.get("mean")}'
+    except:
+        filename = f'N{yaml_data.get("num_det")}_DE{yaml_data.get("eta")}_XT{yaml_data.get("xtk")}_STAT_{photon_distribution.get("type")}_{photon_distribution.get("probabilities")}'
+
+    cwd = pathlib.Path('.') / 'simulations' / filename
+    pathlib.Path(cwd).mkdir(parents=True, exist_ok=True)
 
     # Standard
-    fid = get_fidelity('pS.txt', distribution)
+    fid = get_fidelity('pS.txt', distribution, cwd)
     print(f"Fidelity of the reconstruction for standard method: {fid:.3f}.")
 
     # Gallego
-    fid = get_fidelity('pG.txt', distribution)
+    fid = get_fidelity('pG.txt', distribution, cwd)
     print(f"Fidelity of the reconstruction for Gallego method: {fid:.3f}.")
 
 
