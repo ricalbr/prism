@@ -27,9 +27,9 @@ def create_distribution(photon_distribution):
         raise ValueError(f"Photon statistics '{dist_type}' not supported!")
 
 
-def get_fidelity(filename, distribution, num_det, plot=False):
+def get_fidelity(filename, distribution, plot=False):
     p_n = np.loadtxt(filename)
-    p_space = np.array(range(num_det + 1))
+    p_space = np.array(range(len(p_n)))
     p_stat = distribution.pmf(p_space)
     fid = 1 - np.linalg.norm(p_n - p_stat)
 
@@ -51,16 +51,15 @@ def main():
 
     # Load data from config.yaml
     yaml_data = load_yaml("config.yaml")
-    num_det = yaml_data.get("num_det")
     photon_distribution = yaml_data.get("photon_distribution", {})
     distribution = create_distribution(photon_distribution)
 
     # Standard
-    fid = get_fidelity('pS.txt', distribution, num_det)
+    fid = get_fidelity('pS.txt', distribution)
     print(f"Fidelity of the reconstruction for standard method: {fid:.3f}.")
 
     # Gallego
-    fid = get_fidelity('pG.txt', distribution, num_det)
+    fid = get_fidelity('pG.txt', distribution)
     print(f"Fidelity of the reconstruction for Gallego method: {fid:.3f}.")
 
 
