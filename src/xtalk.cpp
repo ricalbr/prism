@@ -58,6 +58,9 @@ double p_m(double p, int k, int m) {
 
 MatrixXd x_matrix_gallego(double eps, int num) {
     MatrixXd mat = MatrixXd::Identity(num + 1, num + 1);
+    if (eps <= 1e-9) {
+        return mat;
+    }
 
     for (int i = 0; i <= num; ++i) {
         for (int j = 0; j < num; ++j) {
@@ -68,12 +71,16 @@ MatrixXd x_matrix_gallego(double eps, int num) {
 }
 
 MatrixXd x_matrix_simple(double eps, int num) {
-    MatrixXd X = MatrixXd::Zero(num + 1, num + 1);
+    MatrixXd mat = MatrixXd::Identity(num + 1, num + 1);
+    if (eps <= 1e-9) {
+        return mat;
+    }
+
     for (int i = 0; i < num + 1; i++) {
         for (int j = 0; j < num + 1; j++) {
-            X(i, j) =
+            mat(i, j) =
                 comb(j, i - j) * pow(eps, i - j) * pow(1 - eps, 2 * j - i);
         }
     }
-    return X;
+    return mat;
 }

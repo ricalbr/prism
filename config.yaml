@@ -11,7 +11,7 @@ dcr_max: 1e-2           # Maximum dark count rate
 # Photon distribution settings
 photon_distribution:
   type: "poisson"      # Options: "poisson" or "discrete"
-  mean: 5            # Used only if distribution_type is "poissonian"
+  mean: 7            # Used only if distribution_type is "poissonian"
   # type: "discrete"      # Options: "poisson" or "discrete"
   # probabilities: [0.0, 0.1, 0, 0, 0, 0, 0, 0.2, 0.4, 0.2, 0.1]
   # probabilities: [0.2, 0.2, 0.2, 0.2, 0.2]
