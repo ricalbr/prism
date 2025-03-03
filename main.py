@@ -68,13 +68,19 @@ def main():
     cwd = pathlib.Path('.') / 'simulations' / filename
     pathlib.Path(cwd).mkdir(parents=True, exist_ok=True)
 
-    # Standard
-    fid = get_fidelity('pS.txt', distribution, cwd)
-    print(f"Fidelity of the reconstruction for standard method: {fid:.3f}.")
+    # # Standard
+    # try:
+    #     fid = get_fidelity('pS.txt', distribution, cwd)
+    #     print(f"Fidelity of the reconstruction for standard method: {fid:.3f}.")
+    # except FileNotFoundError:
+    #     print('File not found')
 
     # Gallego
-    fid = get_fidelity('pG.txt', distribution, cwd)
-    print(f"Fidelity of the reconstruction for Gallego method: {fid:.3f}.")
+    try:
+        fid = get_fidelity('pG.txt', distribution, cwd)
+        print(f"Fidelity of the reconstruction for Gallego method: {fid:.3f}.")
+    except FileNotFoundError:
+        print('File not found')
 
 
 if __name__ == "__main__":
