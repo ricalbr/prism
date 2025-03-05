@@ -1,46 +1,78 @@
+from __future__ import annotations
+
+import pathlib
+
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.stats as stats
+import yaml
 
 
-def mean(arr):
-    return np.sum([i * val for i, val in enumerate(arr)])
+def load_yaml(filename):
+    with open(filename, "r") as file:
+        return yaml.safe_load(file)
 
 
-def variance(arr):
-    return np.sum([val * (i - mean(arr)) ** 2 for i, val in enumerate(arr)])
+def create_distribution(photon_distribution):
+    dist_type = photon_distribution.get("type", "poisson")  # Default: Poisson
+
+    if dist_type == "poisson":
+        mean = photon_distribution.get("mean", 1)  # Default: 1
+        return stats.poisson(mean)
+
+    elif dist_type == "discrete":
+        probabilities = photon_distribution.get("probabilities", [1.0])  # Default: one state
+        values = np.arange(len(probabilities))  # Discrete index states
+        return stats.rv_discrete(name="custom", values=(values, probabilities))
+
+    else:
+        raise ValueError(f"Photon statistics '{dist_type}' not supported!")
+
+
+def get_fidelity(filename, distribution, cwd, plot=False):
+    p_n = np.loadtxt(filename)
+    p_space = np.array(range(len(p_n)))
+    p_stat = distribution.pmf(p_space)
+    fid = 1 - np.linalg.norm(p_n - p_stat)
+
+    # EXPORT
+    np.savetxt(cwd / 'predicted.txt', p_n)
+    np.savetxt(cwd / 'theoretical.txt', p_stat)
+
+    # PLOT
+    plt.figure(1)
+    plt.bar(p_space, p_n, alpha=0.6, color="red", label="Analytic + EME")
+    plt.plot(p_stat, "o--k", label="Theoretical p(n)")
+
+    plt.legend()
+    plt.xlabel("n")
+    plt.ylabel("p(n)")
+    # plt.ylim([0, 1])
+    # if plot:
+    plt.show()
+    plt.savefig(cwd / 'plot.png')
+    return fid
 
 
 def main():
-    c0 = np.loadtxt('c0.txt')
-    cx = np.loadtxt('cx.txt')
-    p_space = np.array(range(len(c0)))
 
-    print(mean(c0), variance(c0))
-    print(mean(cx), variance(cx))
+    # Load data from config.yaml
+    yaml_data = load_yaml("config.yaml")
+    photon_distribution = yaml_data.get("photon_distribution", {})
+    distribution = create_distribution(photon_distribution)
+    try:
+        filename = f'N{yaml_data.get("rows")}x{yaml_data.get("cols")}_DE{yaml_data.get("eta")}_XT{yaml_data.get("xtk")}_STAT_{photon_distribution.get("type")}_{photon_distribution.get("mean")}'
+    except:
+        filename = f'N{yaml_data.get("rows")}x{yaml_data.get("cols")}_DE{yaml_data.get("eta")}_XT{yaml_data.get("xtk")}_STAT_{photon_distribution.get("type")}_{photon_distribution.get("probabilities")}'
 
-    eps = 0.1
-    n = 2
-    ENF = 1 + eps + (3 * n - 3) / (2 * n) * eps**2
-    borel = 1 / (1 + np.log(1 - eps))
-    print(f'{ENF=}')
-    print(f'{borel=}')
-    print(mean(cx) / mean(c0))
-    p
+    cwd = pathlib.Path('.') / 'simulations' / filename
+    pathlib.Path(cwd).mkdir(parents=True, exist_ok=True)
 
-    # # PLOT
-    # plt.figure()
-    #
-    # plt.plot(p_space, c0, "ro-", label="no x-talk")
-    # plt.plot(p_space, cx, "bo-", label="x-talk")
-    #
-    # # plt.bar(p_space, c0, alpha=0.6, color="red", label="no x-talk")
-    # # plt.bar(p_space, cx, alpha=0.6, color="blue", label="x-talk")
-    #
-    # plt.legend()
-    # plt.xlabel("n")
-    # plt.ylabel("freq")
-    # # plt.ylim([0, 1])
-    # plt.show()
+    try:
+        fid = get_fidelity('p_out.txt', distribution, cwd)
+        print(f"Fidelity of the reconstruction: {fid:.3f}.")
+    except FileNotFoundError:
+        print('File not found.')
 
 
 if __name__ == "__main__":
