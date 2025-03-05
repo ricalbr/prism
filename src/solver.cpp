@@ -7,9 +7,8 @@ using namespace Eigen;
 
 VectorXd EMESolver(MatrixXd &A, VectorXd &b, double alpha, int iterations,
                    double eps, int max_stagnation) {
-    int nMax = b.size();
-    VectorXd EME = VectorXd::Zero(nMax);
-    VectorXd pn = VectorXd::Ones(nMax) / nMax;
+    VectorXd EME = VectorXd::Zero(A.cols());
+    VectorXd pn = VectorXd::Ones(A.cols()) / A.cols();
 
     int curr_iter = 0;
     int stagnation_counter = 0;
