@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ricalbr/prism/include/prism/matrix.hpp
+Eigen/Dense
+-
+string
+-
+
+/home/ricalbr/prism/include/prism/xtalk.hpp
+Eigen/Dense
+-
+
+/home/ricalbr/prism/src/xtalk.cpp
+../include/prism/xtalk.hpp
+/home/ricalbr/prism/include/prism/xtalk.hpp
+../include/prism/matrix.hpp
+/home/ricalbr/prism/include/prism/matrix.hpp
+Eigen/Dense
+-
+cmath
+-
+unordered_map
+-
+
