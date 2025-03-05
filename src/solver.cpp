@@ -5,8 +5,7 @@
 
 using namespace Eigen;
 
-VectorXd EMESolver(MatrixXd &A, VectorXd &b, double alpha, int iterations,
-                   double eps, int max_stagnation) {
+VectorXd EMESolver(MatrixXd &A, VectorXd &b, double alpha, int iterations, double eps, int max_stagnation) {
     VectorXd EME = VectorXd::Zero(A.cols());
     VectorXd pn = VectorXd::Ones(A.cols()) / A.cols();
 
@@ -16,8 +15,7 @@ VectorXd EMESolver(MatrixXd &A, VectorXd &b, double alpha, int iterations,
     double last_dist = std::numeric_limits<double>::infinity();
 
     if (start_dist <= eps) {
-        throw std::invalid_argument(
-            "Initial `dist` must be greater than `epsilon`.");
+        throw std::invalid_argument("Initial `dist` must be greater than `epsilon`.");
     }
 
     while (curr_iter <= iterations) {

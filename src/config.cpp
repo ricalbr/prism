@@ -3,8 +3,7 @@
 #include <functional>
 #include <yaml-cpp/yaml.h>
 
-std::tuple<SimulationConfig, std::function<int(Xoshiro256PlusPlus &)>>
-parse_yaml(const std::string &filename) {
+std::tuple<SimulationConfig, std::function<int(Xoshiro256PlusPlus &)>> parse_yaml(const std::string &filename) {
 
     YAML::Node config = YAML::LoadFile(filename);
     SimulationConfig sim_config;
@@ -19,20 +18,13 @@ parse_yaml(const std::string &filename) {
 
     std::function<int(Xoshiro256PlusPlus &)> phot_dist;
 
-    std::string dist_type =
-        config["photon_distribution"]["type"].as<std::string>();
+    std::string dist_type = config["photon_distribution"]["type"].as<std::string>();
     if (dist_type == "poisson") {
         double mean = config["photon_distribution"]["mean"].as<double>();
-        phot_dist = [mean](Xoshiro256PlusPlus &rng) {
-            return generate_photons_poisson(mean, rng);
-        };
+        phot_dist = [mean](Xoshiro256PlusPlus &rng) { return generate_photons_poisson(mean, rng); };
     } else if (dist_type == "discrete") {
-        std::vector<double> probs =
-            config["photon_distribution"]["probabilities"]
-                .as<std::vector<double>>();
-        phot_dist = [probs](Xoshiro256PlusPlus &rng) {
-            return generate_photons_discrete(probs, rng);
-        };
+        std::vector<double> probs = config["photon_distribution"]["probabilities"].as<std::vector<double>>();
+        phot_dist = [probs](Xoshiro256PlusPlus &rng) { return generate_photons_discrete(probs, rng); };
     } else {
         throw std::invalid_argument("Unsupported photon distribution type");
     }

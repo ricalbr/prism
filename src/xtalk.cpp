@@ -120,8 +120,7 @@ MatrixXd x_matrix_simple(double eps, int num) {
 
     for (int i = 0; i < num + 1; i++) {
         for (int j = 0; j < num + 1; j++) {
-            mat(i, j) =
-                comb(j, i - j) * pow(eps, i - j) * pow(1 - eps, 2 * j - i);
+            mat(i, j) = comb(j, i - j) * pow(eps, i - j) * pow(1 - eps, 2 * j - i);
         }
     }
     return mat;
