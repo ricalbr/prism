@@ -36,8 +36,8 @@
 # *.yaml
 p_out.txt
 
-# # Makefiles
-# build/*
+# Makefiles
+build/bin/prism_simulator
 
 # Particular directories
 old/*
