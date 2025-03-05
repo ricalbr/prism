@@ -3,26 +3,29 @@
 #include <Eigen/Dense>
 #include <omp.h>
 #include <queue>
-#include <set>
 
 #include <iostream>
+#include <unordered_set>
+
+// Funzione di hashing personalizzata per std::pair<int, int>
+struct hash_pair {
+    size_t operator()(const std::pair<int, int> &p) const {
+        return std::hash<int>()(p.first) ^ (std::hash<int>()(p.second) << 1);
+    }
+};
 
 using namespace Eigen;
 
 int simulate(int rows, int cols, int num_ph, double eta, const Eigen::VectorXd &dcr, double xtk,
              Xoshiro256PlusPlus &rng) {
-
-    Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic> detector_mat(rows, cols);
-    detector_mat.setConstant(false);
-
-    std::queue<std::pair<int, int>> clicked, nn;
-    int num_det = rows * cols;
+    std::unordered_set<std::pair<int, int>, hash_pair> detector_mat;
+    std::queue<std::pair<int, int>> clicked;
 
     // Dark counts
-    for (int r = 0; r < rows; r++) {
-        for (int c = 0; c < cols; c++) {
+    for (int r = 0; r < rows; ++r) {
+        for (int c = 0; c < cols; ++c) {
             if (rng.next_double() < dcr[r + c * rows]) {
-                detector_mat(r, c) = true;
+                detector_mat.insert({r, c});
                 clicked.push({r, c});
             }
         }
@@ -32,49 +35,46 @@ int simulate(int rows, int cols, int num_ph, double eta, const Eigen::VectorXd &
     for (int i = 0; i < num_ph; ++i) {
         if (rng.next_double() < eta) {
             int r = rng.next() % rows, c = rng.next() % cols;
-            detector_mat(r, c) = true;
-            clicked.push({r, c});
+            if (detector_mat.insert({r, c}).second) {
+                clicked.push({r, c});
+            }
         }
     }
 
     // Crosstalk
     if (xtk > 0.0) {
-        std::vector<std::pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        static const std::vector<std::pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
         auto is_valid = [&](int a, int b) { return (0 <= a) && (a < rows) && (0 <= b) && (b < cols); };
 
-        do {
+        std::queue<std::pair<int, int>> nn;
+
+        while (!clicked.empty()) {
+            // current clicked pixel
+            auto [r, c] = clicked.front();
+            clicked.pop();
+
             // find nearest neighbors
-            while (!clicked.empty()) {
-                auto &[r, c] = clicked.front();
-                clicked.pop();
-                for (auto &[drow, dcol] : directions) {
-                    int nr = r + drow, nc = c + dcol;
-                    if (is_valid(nr, nc) && !detector_mat(nr, nc)) {
-                        nn.push({nr, nc});
-                    }
+            for (const auto &[drow, dcol] : directions) {
+                int nr = r + drow, nc = c + dcol;
+                if (is_valid(nr, nc) && detector_mat.find({nr, nc}) == detector_mat.end()) {
+                    nn.push({nr, nc});
                 }
             }
-            // MC step for evaluating clicks
-            std::set<std::pair<int, int>> s;
+
+            // MC step to evaluate clicks
             while (!nn.empty()) {
-                if ((double)rand() / RAND_MAX < xtk) {
-                    s.insert(nn.front());
-                    detector_mat(nn.front().first, nn.front().second) = true;
-                }
+                auto [nr, nc] = nn.front();
                 nn.pop();
+                if (rng.next_double() < xtk) {
+                    detector_mat.insert({nr, nc});
+                    clicked.push({nr, nc});
+                }
             }
-
-            // a set ensure the uniqueness of the clicked sites, a (r,c) site can only click once even though it may be
-            // evaluated more than once (4 times at max)
-            for (std::pair<int, int> elem : s) {
-                clicked.push(elem);
-            }
-        } while (!clicked.empty());
+        }
     }
-    return (detector_mat.cast<int>().array() == 1).count();
+    return detector_mat.size();
 }
-
 VectorXd get_clicks_array(int rows, int cols, double eta, const Eigen::VectorXd &dcr, double xtk, int iterations,
                           const std::function<int(Xoshiro256PlusPlus &)> &photon_distribution, uint64_t seed) {
 
