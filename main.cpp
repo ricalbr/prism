@@ -31,9 +31,7 @@ int main(int argc, char *argv[]) {
     MatrixXd V = MatrixXd::Zero(num_det + 1, num_det + 1);
     get_spad_matrix(V, num_det, sim_config.eta, dcr.mean(), sim_config.xtk);
     MatrixXd XG = x_matrix_gallego(sim_config.xtk, num_det, 4);
-    // MatrixXd XS = x_matrix_simple(sim_config.xtk, num_det);
     MatrixXd VG = XG * V;
-    // MatrixXd VS = XS * V;
     std::cout << "[DONE]\n";
 
     // // Simulate clicks
@@ -51,14 +49,8 @@ int main(int argc, char *argv[]) {
 
     // Statistics retrieval (EME)
     std::cout << "Retrieving photon statistics...\t" << std::endl;
-
-    // std::cout << "\t- Standard method...\t";
-    // VectorXd pS = EMESolver(VS, c, sim_config.alpha);
-    // write_array(pS, "pS.txt");
-
-    std::cout << "\t- Gallego method...\t";
-    VectorXd pG = EMESolver(VG, c, sim_config.alpha);
-    write_array(pG, "pG.txt");
+    VectorXd p_out = EMESolver(VG, c, sim_config.alpha);
+    write_array(p_out, "p_out.txt");
 
     return 0;
 }
