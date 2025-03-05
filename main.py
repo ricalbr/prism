@@ -47,9 +47,9 @@ def get_fidelity(filename, distribution, cwd, plot=False):
     plt.legend()
     plt.xlabel("n")
     plt.ylabel("p(n)")
-    plt.ylim([0, 1])
-    if plot:
-        plt.show()
+    # plt.ylim([0, 1])
+    # if plot:
+    plt.show()
     plt.savefig(cwd / 'plot.png')
     return fid
 
@@ -61,9 +61,9 @@ def main():
     photon_distribution = yaml_data.get("photon_distribution", {})
     distribution = create_distribution(photon_distribution)
     try:
-        filename = f'N{yaml_data.get("num_det")}_DE{yaml_data.get("eta")}_XT{yaml_data.get("xtk")}_STAT_{photon_distribution.get("type")}_{photon_distribution.get("mean")}'
+        filename = f'N{yaml_data.get("rows")}x{yaml_data.get("cols")}_DE{yaml_data.get("eta")}_XT{yaml_data.get("xtk")}_STAT_{photon_distribution.get("type")}_{photon_distribution.get("mean")}'
     except:
-        filename = f'N{yaml_data.get("num_det")}_DE{yaml_data.get("eta")}_XT{yaml_data.get("xtk")}_STAT_{photon_distribution.get("type")}_{photon_distribution.get("probabilities")}'
+        filename = f'N{yaml_data.get("rows")}x{yaml_data.get("cols")}_DE{yaml_data.get("eta")}_XT{yaml_data.get("xtk")}_STAT_{photon_distribution.get("type")}_{photon_distribution.get("probabilities")}'
 
     cwd = pathlib.Path('.') / 'simulations' / filename
     pathlib.Path(cwd).mkdir(parents=True, exist_ok=True)
