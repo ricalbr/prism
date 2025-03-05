@@ -1,87 +1,84 @@
 #include "../include/prism/simulation.hpp"
 #include "../include/prism/random.hpp"
 #include <Eigen/Dense>
-#include <bitset>
 #include <omp.h>
+#include <queue>
+#include <set>
 
 #include <iostream>
 
 using namespace Eigen;
 
-const int MAX_DET = 256;
+int simulate(int rows, int cols, int num_ph, double eta, const Eigen::VectorXd &dcr, double xtk,
+             Xoshiro256PlusPlus &rng) {
 
-int simulate(int num_det, int num_ph, double eta, const Eigen::VectorXd &dcr,
-             double xtk, Xoshiro256PlusPlus &rng) {
-    std::bitset<MAX_DET> click_space;
+    Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic> detector_mat(rows, cols);
+    detector_mat.setConstant(false);
+
+    std::queue<std::pair<int, int>> clicked, nn;
+    int num_det = rows * cols;
 
     // Dark counts
-    for (int i = 0; i < num_det; ++i) {
-        if (rng.next_double() < dcr[i]) {
-            click_space.set(i);
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < cols; c++) {
+            if (rng.next_double() < dcr[r + c * rows]) {
+                detector_mat(r, c) = true;
+                clicked.push({r, c});
+            }
         }
     }
 
     // Photon counts
     for (int i = 0; i < num_ph; ++i) {
         if (rng.next_double() < eta) {
-            click_space.set(rng.next() % num_det);
+            int r = rng.next() % rows, c = rng.next() % cols;
+            detector_mat(r, c) = true;
+            clicked.push({r, c});
         }
     }
 
     // Crosstalk
     if (xtk > 0.0) {
-        std::bitset<MAX_DET> click_space_old = click_space;
-        std::vector<int> mask(num_det, 0);
-        std::vector<int> nbors(num_det, 0);
-        for (int i = 0; i < num_det; ++i) {
-            mask[i] = click_space[i];
-        }
-        while (true) {
-            for (int i = 0; i < num_det; i++) {
-                int left = 0, right = 0;
-                if (i > 0) {
-                    left = (click_space ^ click_space_old)[i - 1];
-                }
-                if (i < num_det - 1) {
-                    right = (click_space ^ click_space_old)[i + 1];
-                }
-                nbors[i] = left + right;
-            }
+        std::vector<std::pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
-            for (int i = 0; i < num_det; i++) {
-                if (mask[i] == 0) {
-                    mask[i] = nbors[i];
-                } else {
-                    mask[i] = 0;
-                }
-            }
+        auto is_valid = [&](int a, int b) { return (0 <= a) && (a < rows) && (0 <= b) && (b < cols); };
 
-            click_space_old = click_space;
-            for (int i = 0; i < num_det; i++) {
-                for (int j = 0; j < mask[i]; j++) {
-                    if (rng.next_double() < xtk) {
-                        click_space.set(i);
+        do {
+            // find nearest neighbors
+            while (!clicked.empty()) {
+                auto &[r, c] = clicked.front();
+                clicked.pop();
+                for (auto &[drow, dcol] : directions) {
+                    int nr = r + drow, nc = c + dcol;
+                    if (is_valid(nr, nc) && !detector_mat(nr, nc)) {
+                        nn.push({nr, nc});
                     }
                 }
             }
-
-            if ((click_space ^ click_space_old).none()) {
-                break;
+            // MC step for evaluating clicks
+            std::set<std::pair<int, int>> s;
+            while (!nn.empty()) {
+                if ((double)rand() / RAND_MAX < xtk) {
+                    s.insert(nn.front());
+                    detector_mat(nn.front().first, nn.front().second) = true;
+                }
+                nn.pop();
             }
 
-            for (int i = 0; i < num_det; i++) {
-                mask[i] = click_space_old[i] + click_space[i];
+            // a set ensure the uniqueness of the clicked sites, a (r,c) site can only click once even though it may be
+            // evaluated more than once (4 times at max)
+            for (std::pair<int, int> elem : s) {
+                clicked.push(elem);
             }
-        }
+        } while (!clicked.empty());
     }
-    return click_space.count();
+    return (detector_mat.cast<int>().array() == 1).count();
 }
 
-VectorXd get_clicks_array(
-    int num_det, double eta, const Eigen::VectorXd &dcr, double xtk,
-    int iterations,
-    const std::function<int(Xoshiro256PlusPlus &)> &photon_distribution,
-    uint64_t seed) {
+VectorXd get_clicks_array(int rows, int cols, double eta, const Eigen::VectorXd &dcr, double xtk, int iterations,
+                          const std::function<int(Xoshiro256PlusPlus &)> &photon_distribution, uint64_t seed) {
+
+    int num_det = rows * cols;
     VectorXd frequencies = VectorXd::Zero(num_det + 1);
 
 #pragma omp parallel
@@ -92,12 +89,11 @@ VectorXd get_clicks_array(
 #pragma omp for schedule(static, 100)
         for (int i = 0; i < iterations; ++i) {
             int num_ph = photon_distribution(rng);
-            int sum_clicks = simulate(num_det, num_ph, eta, dcr, xtk, rng);
-            if (sum_clicks < local_frequencies.size()) { // Ensure valid index
+            int sum_clicks = simulate(rows, cols, num_ph, eta, dcr, xtk, rng);
+            if (sum_clicks < num_det) { // Ensure valid index
                 local_frequencies[sum_clicks] += 1.0;
             } else {
-                std::cout << "Saturating... measured clicks: " << sum_clicks
-                          << "\n";
+                std::cout << "Saturating... measured clicks: " << sum_clicks << "\n";
                 local_frequencies[local_frequencies.size() - 1] += 1.0;
             }
         }
