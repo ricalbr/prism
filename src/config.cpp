@@ -7,7 +7,8 @@ std::tuple<SimulationConfig, std::function<int(Xoshiro256PlusPlus &)>> parse_yam
 
     YAML::Node config = YAML::LoadFile(filename);
     SimulationConfig sim_config;
-    sim_config.num_det = config["num_det"].as<int>();
+    sim_config.rows = config["num_row"].as<int>();
+    sim_config.cols = config["num_col"].as<int>();
     sim_config.eta = config["eta"].as<double>();
     sim_config.xtk = config["xtk"].as<double>();
     sim_config.iterations = config["iterations"].as<double>();

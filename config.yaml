@@ -1,7 +1,8 @@
 # Simulation parameters
-num_det: 64             # Number of detectors
-eta: 0.8                # Detection efficiency
-xtk: 0.05               # Crosstalk probability
+num_row: 8              # Number of SPAD rows
+num_col: 8              # Number of SPAD cols
+eta: 0.604              # Detection efficiency
+xtk: 0.02               # Crosstalk probability
 iterations: 1e8         # Number of simulation iterations
 
 # Dark count rate range
@@ -14,7 +15,8 @@ photon_distribution:
   # mean: 6            # Used only if distribution_type is "poissonian"
   type: "discrete"      # Options: "poisson" or "discrete"
   # probabilities: [0.0, 0.1, 0, 0, 0, 0, 0, 0.2, 0.4, 0.2, 0.1]
-  probabilities: [0, 0, 0, 0, 1]
+  # probabilities: [0.2, 0.2, 0.2, 0.2, 0.2]
+  probabilities: [0, 0, 0, 0, 0, 0, 1]
 
 # EME solver settings
-alpha: 1e-5
+alpha: 1e-4

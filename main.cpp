@@ -3,6 +3,7 @@
 #include "include/prism/simulation.hpp"
 #include "include/prism/solver.hpp"
 #include "include/prism/utils.hpp"
+#include "include/prism/xtalk.hpp"
 #include <Eigen/Dense>
 #include <chrono>
 #include <cmath>
@@ -19,39 +20,45 @@ int main(int argc, char *argv[]) {
 
     auto [sim_config, phot_dist] = parse_yaml(argv[1]);
 
-    // VectorXd dcr = VectorXd::LinSpaced(sim_config.num_det,
-    // std::log(sim_config.dcr_min), std::log10(sim_config.dcr_max));
-    VectorXd exponents =
-        VectorXd::LinSpaced(sim_config.num_det, std::log10(sim_config.dcr_min),
-                            std::log10(sim_config.dcr_max));
-    VectorXd dcr =
-        exponents.unaryExpr([](double exp) { return std::pow(10.0, exp); });
+    int rows = sim_config.rows, cols = sim_config.cols;
+    int num_det = rows * cols;
+
+    VectorXd exponents = VectorXd::LinSpaced(num_det, std::log10(sim_config.dcr_min), std::log10(sim_config.dcr_max));
+    VectorXd dcr = exponents.unaryExpr([](double exp) { return std::pow(10.0, exp); });
 
     // Compute SPAD matrix
-    std::cout << "Computing SPAD matrix\t";
-    MatrixXd V = MatrixXd::Zero(sim_config.num_det + 1, sim_config.num_det + 1);
-    get_spad_matrix(V, sim_config.num_det, sim_config.eta, dcr.mean(),
-                    sim_config.xtk);
+    std::cout << "Computing SPAD matrix\t\t";
+    MatrixXd V = MatrixXd::Zero(num_det + 1, num_det + 1);
+    get_spad_matrix(V, num_det, sim_config.eta, dcr.mean(), sim_config.xtk);
+    MatrixXd XG = x_matrix_gallego(sim_config.xtk, num_det, 4);
+    // MatrixXd XS = x_matrix_simple(sim_config.xtk, num_det);
+    MatrixXd VG = XG * V;
+    // MatrixXd VS = XS * V;
     std::cout << "[DONE]\n";
 
     // // Simulate clicks
-    std::cout << "Simulating clicks\t";
-
+    std::cout << "Simulating clicks\t\t";
     uint64_t seed = 123456789; // Seed for RNG
     auto start_time = std::chrono::high_resolution_clock::now();
-    VectorXd c = get_clicks_array(sim_config.num_det, sim_config.eta, dcr,
-                                  sim_config.xtk, sim_config.iterations,
-                                  phot_dist, seed);
+
+    VectorXd c =
+        get_clicks_array(rows, cols, sim_config.eta, dcr, sim_config.xtk, sim_config.iterations, phot_dist, seed);
     auto end_time = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed_seconds = end_time - start_time;
     std::cout << "[DONE]\n";
     std::cout << "Elapsed time: " << elapsed_seconds.count() << " s\n";
     // write_array(c, "freq.txt");
 
-    // // Statistics retrieval (EME)
-    std::cout << "Retrieving photon statistics...\t";
-    VectorXd p = EMESolver(V, c, sim_config.alpha);
-    write_array(p, "p.txt");
+    // Statistics retrieval (EME)
+    std::cout << "Retrieving photon statistics...\t" << std::endl;
+
+    // std::cout << "\t- Standard method...\t";
+    // VectorXd pS = EMESolver(VS, c, sim_config.alpha);
+    // write_array(pS, "pS.txt");
+
+    std::cout << "\t- Gallego method...\t";
+    VectorXd pG = EMESolver(VG, c, sim_config.alpha);
+    write_array(pG, "pG.txt");
 
     return 0;
 }

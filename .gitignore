@@ -34,9 +34,16 @@
 # Text files
 # *.txt
 # *.yaml
+p.txt
+pG.txt
+pS.txt
 
 # Makefiles
 build/*
+
+# Particular directories
+old/*
+simulations/*
 
 # Python cache directory
 __pycache__/*

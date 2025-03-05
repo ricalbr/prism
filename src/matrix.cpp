@@ -1,7 +1,9 @@
 #include "../include/prism/matrix.hpp"
 #include <Eigen/Dense>
 #include <cmath>
-#include <iostream>
+#include <sstream>
+#include <unordered_map>
+#include <vector>
 
 using namespace Eigen;
 
@@ -20,11 +22,10 @@ long long comb(int n, int k) {
     return c[k];
 }
 
-// Memoizzazione personalizzata per P
 std::unordered_map<std::string, double> memo;
-std::string make_key(int D, double eta, double dcr, int N, int C, int K) {
+template <typename... Args> std::string make_key(Args... args) {
     std::ostringstream oss;
-    oss << D << "," << eta << "," << dcr << "," << N << "," << C << "," << K;
+    ((oss << args << ","), ...);
     return oss.str();
 }
 
@@ -40,10 +41,8 @@ double P(int D, double eta, double dcr, int N, int C, int K) {
         return memo[key];
     }
 
-    double term1 =
-        ((1 - eta) + eta * (K + C) / D) * P(D, eta, dcr, N - 1, C, K);
-    double term2 =
-        (eta * (D - (K + C - 1)) / D) * P(D, eta, dcr, N - 1, C - 1, K);
+    double term1 = ((1 - eta) + eta * (K + C) / D) * P(D, eta, dcr, N - 1, C, K);
+    double term2 = (eta * (D - (K + C - 1)) / D) * P(D, eta, dcr, N - 1, C - 1, K);
     double result = term1 + term2;
 
     memo[key] = result;
@@ -58,23 +57,11 @@ double analytic(int D, double eta, double dcr, int N, int L) {
     return sum;
 }
 
-void get_spad_matrix(MatrixXd &A, int num_det, double eta, double dcr,
-                     double xtk) {
+void get_spad_matrix(MatrixXd &A, int num_det, double eta, double dcr, double xtk) {
 
     for (int n = 0; n <= num_det; ++n) {
         for (int m = 0; m <= num_det; ++m) {
             A(n, m) = analytic(num_det, eta, dcr, m, n);
         }
-    }
-    // Add cross-talk
-    if (xtk > 1e-8) {
-        MatrixXd X = MatrixXd::Zero(num_det + 1, num_det + 1);
-        for (int i = 0; i < num_det + 1; i++) {
-            for (int j = 0; j < num_det + 1; j++) {
-                X(i, j) =
-                    comb(j, i - j) * pow(xtk, i - j) * pow(1 - xtk, 2 * j - i);
-            }
-        }
-        A = X * A;
     }
 }

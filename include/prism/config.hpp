@@ -7,7 +7,8 @@
 #include <tuple>
 
 struct SimulationConfig {
-    int num_det;
+    int rows;
+    int cols;
     double eta;
     double xtk;
     int iterations;
