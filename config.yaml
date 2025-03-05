@@ -2,7 +2,7 @@
 num_row: 8              # Number of SPAD rows
 num_col: 8              # Number of SPAD cols
 eta: 0.604              # Detection efficiency
-xtk: 0.0               # Crosstalk probability
+xtk: 0.02               # Crosstalk probability
 iterations: 1e8         # Number of simulation iterations
 
 # Dark count rate range

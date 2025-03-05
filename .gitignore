@@ -34,12 +34,10 @@
 # Text files
 # *.txt
 # *.yaml
-p.txt
-pG.txt
-pS.txt
+p_out.txt
 
-# Makefiles
-build/*
+# # Makefiles
+# build/*
 
 # Particular directories
 old/*
