@@ -24,7 +24,7 @@ int simulate(int rows, int cols, int num_ph, double eta, const Eigen::VectorXd &
     // Dark counts
     for (int r = 0; r < rows; ++r) {
         for (int c = 0; c < cols; ++c) {
-            if (rng.next_double() < dcr[r + c * rows]) {
+            if (rng.next_double() < dcr[c + r * rows]) {
                 detector_mat.insert({r, c});
                 clicked.push({r, c});
             }
@@ -35,7 +35,7 @@ int simulate(int rows, int cols, int num_ph, double eta, const Eigen::VectorXd &
     for (int i = 0; i < num_ph; ++i) {
         if (rng.next_double() < eta) {
             int r = rng.next() % rows, c = rng.next() % cols;
-            if (detector_mat.insert({r, c}).second) {
+            if (detector_mat.insert({r, c}).second) { // .second is true only if the element is not present in the set
                 clicked.push({r, c});
             }
         }
