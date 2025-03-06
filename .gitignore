@@ -37,7 +37,7 @@
 p_out.txt
 
 # Makefiles
-build/bin/prism_simulator
+build/*
 
 # Particular directories
 old/*
