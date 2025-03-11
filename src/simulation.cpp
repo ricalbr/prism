@@ -35,7 +35,8 @@ int simulate(int rows, int cols, int num_ph, double eta, const Eigen::VectorXd &
     for (int i = 0; i < num_ph; ++i) {
         if (rng.next_double() < eta) {
             int r = rng.next() % rows, c = rng.next() % cols;
-            if (detector_mat.insert({r, c}).second) { // .second is true only if the element is not present in the set
+            if (detector_mat.insert({r, c})
+                    .second) { // .second is true only if the element is inserted in the set for the first time
                 clicked.push({r, c});
             }
         }
@@ -49,16 +50,18 @@ int simulate(int rows, int cols, int num_ph, double eta, const Eigen::VectorXd &
 
         std::queue<std::pair<int, int>> nn;
 
-        while (!clicked.empty()) {
-            // current clicked pixel
-            auto [r, c] = clicked.front();
-            clicked.pop();
+        do {
+            while (!clicked.empty()) {
+                // current clicked pixel
+                auto [r, c] = clicked.front();
+                clicked.pop();
 
-            // find nearest neighbors
-            for (const auto &[drow, dcol] : directions) {
-                int nr = r + drow, nc = c + dcol;
-                if (is_valid(nr, nc) && detector_mat.find({nr, nc}) == detector_mat.end()) {
-                    nn.push({nr, nc});
+                // find nearest neighbors
+                for (const auto &[drow, dcol] : directions) {
+                    int nr = r + drow, nc = c + dcol;
+                    if (is_valid(nr, nc) && detector_mat.find({nr, nc}) == detector_mat.end()) {
+                        nn.push({nr, nc});
+                    }
                 }
             }
 
@@ -67,11 +70,12 @@ int simulate(int rows, int cols, int num_ph, double eta, const Eigen::VectorXd &
                 auto [nr, nc] = nn.front();
                 nn.pop();
                 if (rng.next_double() < xtk) {
-                    detector_mat.insert({nr, nc});
-                    clicked.push({nr, nc});
+                    if (detector_mat.insert({nr, nc}).second) {
+                        clicked.push({nr, nc});
+                    }
                 }
             }
-        }
+        } while (!clicked.empty());
     }
     return detector_mat.size();
 }
