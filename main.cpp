@@ -30,8 +30,12 @@ int main(int argc, char *argv[]) {
     std::cout << "Computing SPAD matrix\t\t";
     MatrixXd V = MatrixXd::Zero(num_det + 1, num_det + 1);
     get_spad_matrix(V, num_det, sim_config.eta, dcr.mean(), sim_config.xtk);
-    MatrixXd XG = x_matrix_gallego(sim_config.xtk, num_det, 4);
-    MatrixXd VG = XG * V;
+    MatrixXd tmp = x_matrix_gallego(sim_config.xtk, num_det, 4);
+    MatrixXd XT = MatrixXd::Identity(num_det + 1, num_det + 1);
+    for (int i = 0; i < 3; i++) {
+        XT *= tmp;
+    }
+    MatrixXd VG = XT * V;
     std::cout << "[DONE]\n";
 
     // // Simulate clicks
