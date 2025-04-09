@@ -40,6 +40,8 @@ def get_fidelity(filename, distribution, cwd, plot=False):
     # print(f'{fid=}')
     fid = np.sum([np.sqrt(p_n * p_stat)]) ** 2
     print(f'{fid=}')
+    hell_distance = 0.5 * np.sum(np.square(np.sqrt(p_n) - np.sqrt(p_stat)))
+    print(f'{hell_distance=}')
 
     # EXPORT
     np.savetxt(cwd / 'predicted.txt', p_n)
@@ -56,8 +58,8 @@ def get_fidelity(filename, distribution, cwd, plot=False):
     plt.title(f'Reconstruction fidelity: {fid*100:.4f}%')
     # plt.ylim([0, 1])
 
-    if plot:
-        plt.show()
+    # if plot:
+    plt.show()
     plt.savefig(cwd / 'plot.png')
     return fid
 
