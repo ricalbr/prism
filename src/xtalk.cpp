@@ -11,7 +11,7 @@ template <typename... Args> std::string make_key(Args... args) {
 }
 
 double p4_xt(double eps, int events) {
-    double p = 1 - std::sqrt(1 - eps);
+    double p = 1 - std::pow(1 - eps, 1.0 / 4);
     double q = 1 - p;
 
     if (events < 1) {
