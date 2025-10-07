@@ -14,6 +14,7 @@
 1. **C++ Compiler**: A C++17 compatible compiler, `g++` or `clang`.
 2. **CMake**: Version 3.10 or higher.
 3. **YAML-CPP**: A C++ library for parsing YAML files. Install `yaml-cpp` with a package manager.
+4. **Eigen**: A C++ template library for linear algebra. Copy the `Eigen` folder to `/usr/local/include`
 
 ### Additional Tools
 - `git` (optional, for cloning the repository)
@@ -37,8 +38,6 @@ sudo apt-get install build-essential cmake libyaml-cpp-dev
 ```
 
 ### Build Instructions
-
-#### Linux
 1. Create a build directory and navigate into it:
    ```bash
    mkdir build && cd build
@@ -56,8 +55,17 @@ sudo apt-get install build-essential cmake libyaml-cpp-dev
    ./bin/prism_simulator
    ```
 
-#### Windows
-Setup Linux on WSL following the instructions at the following [link](https://learn.microsoft.com/en-us/windows/wsl/install).
+### Plotting Instructions
+Create a Python virtual environment and install the required packages with `pip`
+```bash
+python3 -m venv $HOME/.venvs/prism
+source $HOME/.venvs/prism/bin/activate
+pip install numpy matplotlib scipy pyyaml
+```
+
+
+## Windows
+Setup Linux on WSL following the instructions at the following [link](https://learn.microsoft.com/en-us/windows/wsl/install) and follow the Linux setup procedure.
 
 ## File Structure
 - **`prism/`**: Contains the library source and headers.
