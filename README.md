@@ -60,7 +60,7 @@ Create a Python virtual environment and install the required packages with `pip`
 ```bash
 python3 -m venv $HOME/.venvs/prism
 source $HOME/.venvs/prism/bin/activate
-pip install numpy matplotlib scipy pyyaml
+pip install numpy matplotlib scipy pyyaml pyqt6
 ```
 
 
