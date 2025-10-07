@@ -58,9 +58,9 @@ def get_fidelity(filename, distribution, cwd, plot=False):
     plt.title(f'Reconstruction fidelity: {fid*100:.4f}%')
     # plt.ylim([0, 1])
 
-    # if plot:
-    plt.show()
-    plt.savefig(cwd / 'plot.png')
+    if plot:
+        plt.show()
+        plt.savefig(cwd / 'plot.png')
     return fid
 
 
