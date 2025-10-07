@@ -6,18 +6,14 @@
 </div>
 
 ## Overview
-**PRISM** (**P**hoton-statistic **R**etrieval v**I**a **S**PAD arrays **M**odelling) is a library for simulating SPAD array photo-detection and retrieving input light statistics. This document outlines the steps to install dependencies, compile, and run the project on Linux and Windows.
+**PRISM** (**P**hoton-statistic **R**etrieval v**I**a **S**PAD arrays **M**odelling) is a library for simulating SPAD array photo-detection and retrieving input light statistics. This document outlines the steps to install dependencies, compile, and run the project on a Linux environment.
 
 ## Prerequisites
 
 ### Dependencies
-1. **C++ Compiler**: A C++17 compatible compiler is required.
-   - On Linux: `g++` or `clang`
-   - On Windows: Microsoft Visual Studio (MSVC) with C++ tools
+1. **C++ Compiler**: A C++17 compatible compiler, `g++` or `clang`.
 2. **CMake**: Version 3.10 or higher.
-3. **YAML-CPP**: A C++ library for parsing YAML files.
-   - On Linux: Install via your package manager (e.g., `apt`, `dnf`)
-   - On Windows: Install via vcpkg or build from source
+3. **YAML-CPP**: A C++ library for parsing YAML files. Install `yaml-cpp` with a package manager.
 
 ### Additional Tools
 - `git` (optional, for cloning the repository)
@@ -39,23 +35,6 @@ On Debian/Ubuntu-based distributions:
 sudo apt-get update
 sudo apt-get install build-essential cmake libyaml-cpp-dev
 ```
-On Red Hat/Fedora-based distributions:
-```bash
-sudo dnf install gcc-c++ cmake yaml-cpp-devel
-```
-
-#### Windows
-1. Install [Visual Studio](https://visualstudio.microsoft.com/) with the C++ development workload.
-2. Install CMake from [cmake.org](https://cmake.org/).
-3. Install `yaml-cpp` using [vcpkg](https://vcpkg.io/):
-   ```bash
-   vcpkg install yaml-cpp
-   ```
-
-Ensure `vcpkg` integration is enabled by running:
-```bash
-vcpkg integrate install
-```
 
 ### Build Instructions
 
@@ -74,27 +53,11 @@ vcpkg integrate install
    ```
 4. Run the executable:
    ```bash
-   ./prism_simulator
+   ./bin/prism_simulator
    ```
 
 #### Windows
-1. Open a `Developer Command Prompt` for Visual Studio or use `PowerShell`.
-2. Create a build directory and navigate into it:
-   ```bash
-   mkdir build && cd build
-   ```
-3. Run CMake to configure the project:
-   ```bash
-   cmake .. -G "Visual Studio 16 2019" -A x64
-   ```
-4. Open the generated `prism.sln` file in Visual Studio and build the solution, or build from the command line:
-   ```bash
-   cmake --build .
-   ```
-5. Run the executable:
-   ```
-   prism_simulator.exe
-   ```
+Setup Linux on WSL following the instructions at the following [link](https://learn.microsoft.com/en-us/windows/wsl/install).
 
 ## File Structure
 - **`prism/`**: Contains the library source and headers.
