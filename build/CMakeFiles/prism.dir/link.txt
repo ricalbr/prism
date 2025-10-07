@@ -1,2 +1,2 @@
-/usr/bin/ar qc lib/libprism.a  CMakeFiles/prism.dir/src/config.cpp.o CMakeFiles/prism.dir/src/matrix.cpp.o CMakeFiles/prism.dir/src/random.cpp.o CMakeFiles/prism.dir/src/simulation.cpp.o CMakeFiles/prism.dir/src/solver.cpp.o CMakeFiles/prism.dir/src/utils.cpp.o CMakeFiles/prism.dir/src/xtalk.cpp.o
+/usr/bin/ar qc lib/libprism.a CMakeFiles/prism.dir/src/config.cpp.o CMakeFiles/prism.dir/src/matrix.cpp.o CMakeFiles/prism.dir/src/random.cpp.o CMakeFiles/prism.dir/src/simulation.cpp.o CMakeFiles/prism.dir/src/solver.cpp.o CMakeFiles/prism.dir/src/utils.cpp.o CMakeFiles/prism.dir/src/xtalk.cpp.o
 /usr/bin/ranlib lib/libprism.a

@@ -1,5 +1,7 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/prism_simulator.dir/link.d"
   "CMakeFiles/prism_simulator.dir/main.cpp.o"
+  "CMakeFiles/prism_simulator.dir/main.cpp.o.d"
   "bin/prism_simulator"
   "bin/prism_simulator.pdb"
 )
