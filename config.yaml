@@ -1,7 +1,7 @@
 # Simulation parameters
-num_row: 4              # Number of SPAD rows
-num_col: 4              # Number of SPAD cols
-eta: 0.62              # Detection efficiency
+num_row: 8              # Number of SPAD rows
+num_col: 8              # Number of SPAD cols
+eta: 0.90              # Detection efficiency
 xtk: 0.05               # Crosstalk probability
 iterations: 1e7         # Number of simulation iterations
 
