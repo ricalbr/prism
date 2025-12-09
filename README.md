@@ -31,11 +31,11 @@ cd prism
 ### Install Dependencies
 
 #### Linux
-On Debian/Ubuntu-based distributions:
+Install the following packages with your distro's package manager:
 ```bash
-sudo apt-get update
-sudo apt-get install build-essential cmake libyaml-cpp-dev
+build-essential cmake yaml-cpp
 ```
+**Note:** For some distros `yaml-cpp` is not packaged for the default repositories. If `yaml-cpp` is not available, take a look [here](https://repology.org/project/yaml-cpp/versions) or try to install `yaml-cpp` from source.
 
 ### Build Instructions
 1. Create a build directory and navigate into it:
