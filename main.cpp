@@ -50,10 +50,9 @@ int main(int argc, char *argv[]) {
     std::cout << "Computing SPAD matrix\t\t";
     MatrixXd V = MatrixXd::Zero(num_det + 1, num_det + 1);
     get_spad_matrix(V, num_det, sim_config.eta, dcr.mean(), sim_config.xtk);
+
     // compute the average number of nearest neighbors (avgNN)
-    float avgNN = (2.0 * 4 + 6.0 * (sim_config.rows + sim_config.cols - 4) +
-                   4.0 * (sim_config.rows - 2) * (sim_config.cols - 2)) /
-                  (sim_config.rows * sim_config.cols);
+    float avgNN = 4.0 - 2.0 / rows - 2.0 / cols;
     float xtk = 1 - std::pow(1 - sim_config.xtk, avgNN);
     MatrixXd XT = x_matrix_gallego(xtk, num_det, 4);
     MatrixXd VG = XT * V;
