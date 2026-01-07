@@ -1,6 +1,7 @@
 #include "../include/prism/random.hpp"
 #include <cmath>
 #include <cstdint>
+#include <random>
 
 Xoshiro256PlusPlus::Xoshiro256PlusPlus(uint64_t seed) {
     for (int i = 0; i < 4; ++i) {
@@ -8,7 +9,9 @@ Xoshiro256PlusPlus::Xoshiro256PlusPlus(uint64_t seed) {
     }
 }
 
-uint64_t Xoshiro256PlusPlus::rotl(const uint_fast64_t x, int k) const { return (x << k) | (x >> (64 - k)); }
+uint64_t Xoshiro256PlusPlus::rotl(const uint_fast64_t x, int k) const {
+    return (x << k) | (x >> (64 - k));
+}
 
 uint_fast64_t Xoshiro256PlusPlus::next() {
     const uint64_t result = rotl(state[0] + state[3], 23) + state[0];
@@ -27,7 +30,9 @@ uint_fast64_t Xoshiro256PlusPlus::next() {
     return result;
 }
 
-double Xoshiro256PlusPlus::next_double() { return (next() >> 11) * (1.0 / (1ULL << 53)); }
+double Xoshiro256PlusPlus::next_double() {
+    return (next() >> 11) * (1.0 / (1ULL << 53));
+}
 
 int generate_photons_poisson(double mean, Xoshiro256PlusPlus &rng) {
     double L = exp(-mean);
@@ -42,7 +47,8 @@ int generate_photons_poisson(double mean, Xoshiro256PlusPlus &rng) {
     return k - 1;
 }
 
-int generate_photons_discrete(const std::vector<double> &probabilities, Xoshiro256PlusPlus &rng) {
+int generate_photons_discrete(const std::vector<double> &probabilities,
+                              Xoshiro256PlusPlus &rng) {
     double random_value = rng.next_double();
     double cumulative = 0.0;
     for (size_t i = 0; i < probabilities.size(); ++i) {
@@ -52,4 +58,15 @@ int generate_photons_discrete(const std::vector<double> &probabilities, Xoshiro2
         }
     }
     return probabilities.size() - 1;
+}
+
+int generate_photons_thermal(double mean, Xoshiro256PlusPlus &rng) {
+    const double p = mean / (1.0 + mean);
+
+    double u;
+    do {
+        u = rng.next_double();
+    } while (u == 0.0);
+
+    return static_cast<int>(std::log(u) / std::log(p));
 }

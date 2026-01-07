@@ -1,7 +1,7 @@
 # Simulation parameters
-num_row: 8              # Number of SPAD rows
-num_col: 8              # Number of SPAD cols
-eta: 0.42              # Detection efficiency
+num_row: 5              # Number of SPAD rows
+num_col: 5              # Number of SPAD cols
+eta: 0.3057              # Detection efficiency
 xtk: 0.05               # Crosstalk probability
 iterations: 1e7         # Number of simulation iterations
 
@@ -10,17 +10,18 @@ dcr_min: 1e-3           # Minimum dark count rate
 dcr_max: 1e-2           # Maximum dark count rate
 
 # Photon distribution settings
+# options: "poisson", "thermal" or "discrete"
 photon_distribution:
-  type: "poisson"      # Options: "poisson" or "discrete"
-  mean: 6            # Used only if distribution_type is "poissonian"
+  type: "poisson"
+  mean: 4.95
 
-  # type: "discrete"      # Options: "poisson" or "discrete"
-  # probabilities: [0.0, 0.1, 0, 0, 0, 0, 0, 0.2, 0.4, 0.2, 0.1]
-  # probabilities: [0.2, 0.2, 0.2, 0.2, 0.2]
-  # probabilities: [0, 0, 0, 0, 0, 0, 1]
-  # probabilities: [0, 1]
-  # probabilities: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
-  # probabilities: [0, 0, 0, 0.5, 0, 0.5]
+# photon_distribution:
+#   type: "thermal"
+#   mean: 4.93
+
+# photon_distribution:
+#   type: "discrete"
+#   probabilities: [0.45, 0.55]
 
 # EME solver settings
 alpha: 1e-2

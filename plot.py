@@ -22,7 +22,10 @@ def create_distribution(photon_distribution):
     if dist_type == "poisson":
         mean = photon_distribution.get("mean", 1)  # Default: 1
         return stats.poisson(mean)
-
+    if dist_type == "thermal":
+        mean = photon_distribution.get("mean", 1)  # Default: 1
+        p0 = 1.0 / (1.0 + mean)
+        return stats.geom(p0, loc=-1)
     elif dist_type == "discrete":
         probabilities = photon_distribution.get(
             "probabilities", [1.0]
@@ -34,7 +37,7 @@ def create_distribution(photon_distribution):
         raise ValueError(f"Photon statistics '{dist_type}' not supported!")
 
 
-def get_fidelity(filename, distribution, cwd, plot=False):
+def get_fidelity(filename, distribution, cwd, plot=True):
     p_n = np.loadtxt(filename)
     p_space = np.array(range(len(p_n)))
     p_stat = distribution.pmf(p_space)
@@ -42,9 +45,11 @@ def get_fidelity(filename, distribution, cwd, plot=False):
     # print(f'{fid=}')
     fid = np.sum([np.sqrt(p_n * p_stat)]) ** 2
     print(f"{fid=}")
-    hell_distance = 0.5 * np.sum(np.square(np.sqrt(p_n) - np.sqrt(p_stat)))
-    print(f"{hell_distance=}")
-    print(f"log hell_distance={np.log10(hell_distance)}")
+    dist = 0.5 * np.sum(np.abs(p_n - p_stat))
+    print(f"{dist=}")
+    # hell_distance = 0.5 * np.sum(np.square(np.sqrt(p_n) - np.sqrt(p_stat)))
+    # print(f"{hell_distance=}")
+    # print(f"log hell_distance={np.log10(hell_distance)}")
 
     # EXPORT
     np.savetxt(cwd / "predicted.txt", p_n)
@@ -79,7 +84,7 @@ def main():
         yaml_data.get("xtk"),
     )
     filename = f"M{r}x{c}_PDE{e * 100}_XT{x * 100}"
-    if photon_distribution.get("type") == "poisson":
+    if photon_distribution.get("type") in ["poisson", "thermal"]:
         filename += (
             f"_STAT_{photon_distribution.get('type')}_{photon_distribution.get('mean')}"
         )
