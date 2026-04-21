@@ -5,6 +5,7 @@
 #include "include/prism/utils.hpp"
 #include "include/prism/xtalk.hpp"
 
+#include <Eigen/Core>
 #include <Eigen/Dense>
 #include <chrono>
 #include <cmath>
@@ -12,6 +13,7 @@
 #include <iostream>
 #include <ostream>
 #include <string>
+#include <sys/stat.h>
 #include <yaml-cpp/yaml.h>
 
 using namespace Eigen;
@@ -27,6 +29,27 @@ void saveMatrix(const Eigen::MatrixXd &M, const std::string &filename) {
                            "\n");
     file << M.format(format);
     file.close();
+}
+
+inline bool fileExists(const std::string &name) {
+    struct stat buffer;
+    return (stat(name.c_str(), &buffer) == 0);
+}
+
+void loadFromFile(const std::string &name, VectorXd &outputMat) {
+    std::ifstream file(name);
+    if (!file) {
+        throw std::runtime_error("Cannot open file: " + name);
+    }
+
+    std::vector<double> temp;
+    double value;
+
+    while (file >> value) {
+        temp.push_back(value);
+    }
+
+    outputMat = Eigen::Map<VectorXd>(temp.data(), temp.size());
 }
 
 int main(int argc, char *argv[]) {
@@ -63,14 +86,20 @@ int main(int argc, char *argv[]) {
     uint64_t seed = 123456789; // Seed for RNG
     auto start_time = std::chrono::high_resolution_clock::now();
 
-    VectorXd c =
-        get_clicks_array(rows, cols, sim_config.eta, dcr, sim_config.xtk,
-                         sim_config.iterations, phot_dist, seed);
-    auto end_time = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> elapsed_seconds = end_time - start_time;
-    std::cout << "[DONE]\n";
-    std::cout << "Elapsed time: " << elapsed_seconds.count() << " s\n";
-    // write_array(c, "freq.txt");
+    VectorXd c;
+    if (fileExists("freq.txt")) {
+        // if frequency file is present, load it
+        loadFromFile("freq.txt", c);
+    } else {
+        // if frequency file is not present, simulate it and save to file
+        c = get_clicks_array(rows, cols, sim_config.eta, dcr, sim_config.xtk,
+                             sim_config.iterations, phot_dist, seed);
+        auto end_time = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed_seconds = end_time - start_time;
+        std::cout << "[DONE]\n";
+        std::cout << "Elapsed time: " << elapsed_seconds.count() << " s\n";
+        write_array(c, "freq.txt");
+    }
 
     // Statistics retrieval (EME)
     std::cout << "Retrieving photon statistics...\t" << std::endl;
