@@ -37,6 +37,12 @@ build-essential cmake yaml-cpp
 ```
 **Note:** For some distros `yaml-cpp` is not packaged for the default repositories. If `yaml-cpp` is not available, take a look [here](https://repology.org/project/yaml-cpp/versions) or try to install `yaml-cpp` from source.
 
+Install Eigen by downloading the library from [this](https://libeigen.gitlab.io/) website, unzip the directory and run the following commands
+```bash
+cd eigen-5.0.0
+sudo cp -r Eigen /usr/local/include
+```
+
 ### Build Instructions
 1. Create a build directory and navigate into it:
    ```bash
