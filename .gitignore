@@ -45,3 +45,6 @@ simulations/*
 
 # Python cache directory
 __pycache__/*
+
+# Frequency file
+freq.txt
