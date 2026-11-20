@@ -41,15 +41,12 @@ def get_fidelity(filename, distribution, cwd, plot=True):
     p_n = np.loadtxt(filename)
     p_space = np.array(range(len(p_n)))
     p_stat = distribution.pmf(p_space)
-    # fid = 1 - np.linalg.norm(p_n - p_stat)
-    # print(f'{fid=}')
     fid = np.sum([np.sqrt(p_n * p_stat)]) ** 2
     print(f"{fid=}")
     dist = 0.5 * np.sum(np.abs(p_n - p_stat))
     print(f"{dist=}")
     # hell_distance = 0.5 * np.sum(np.square(np.sqrt(p_n) - np.sqrt(p_stat)))
     # print(f"{hell_distance=}")
-    # print(f"log hell_distance={np.log10(hell_distance)}")
 
     # EXPORT
     np.savetxt(cwd / "predicted.txt", p_n)
