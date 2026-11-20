@@ -42,6 +42,7 @@ build/*
 # Particular directories
 old/*
 simulations/*
+build/*
 
 # Python cache directory
 __pycache__/*
