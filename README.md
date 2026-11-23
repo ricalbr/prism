@@ -44,19 +44,28 @@ sudo cp -r Eigen /usr/local/include
 ```
 
 ### Build Instructions
-1. Create a build directory and navigate into it:
+1. Create a build directory
    ```bash
-   mkdir build && cd build
+   mkdir build
    ```
-2. Run CMake to configure the project:
+   and navigate into it
+   ```bash
+   cd build
+   ```
+   
+3. Run CMake to configure the project:
    ```bash
    cmake ..
    ```
-3. Compile the project:
+4. Compile the project:
    ```bash
    cmake --build .
    ```
-4. Run the executable:
+   **Note:** these commands can be chained together in a single one with `&&` as
+   ```bash
+   cd build && cmake .. && cmake --build . && cd ..
+   ```
+6. Run the executable:
    ```bash
    ./bin/prism_simulator
    ```
